@@ -1,4 +1,4 @@
-﻿namespace LoadBalancing
+﻿namespace LoadBalancer
 {
     public enum LoadDistributionAlgorithm
     {

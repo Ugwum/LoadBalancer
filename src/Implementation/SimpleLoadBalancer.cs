@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 
-namespace LoadBalancing.Implementation
+namespace LoadBalancer.Implementation
 {
     public class SimpleLoadBalancer : ILoadBalancer, IDisposable
     {

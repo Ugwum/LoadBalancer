@@ -24,7 +24,7 @@ Follow these steps to get started with the load balancer:
 1. **Clone this repository to your local machine:**
 
    ```bash
-   git clone https://github.com/yourusername/load-balancer-csharp.git
+   git clone https://github.com/Ugwum/LoadBalancer.git
 
 2. **Open the project in your favorite C# development environment (e.g., Visual Studio, Visual Studio Code).**
 

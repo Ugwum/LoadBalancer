@@ -65,11 +65,9 @@ namespace LoadBalancer.Implementation
             {
                 return new HttpResponseMessage(System.Net.HttpStatusCode.ServiceUnavailable);
             }
-
-            // Define a retry policy using Polly
+             
             var retryPolicy = Policy
-                .Handle<HttpRequestException>() // Retry on HttpRequestException
-                                                //.Or<OtherCustomException>()    // Add other exceptions you want to handle
+                .Handle<HttpRequestException>() 
                 .WaitAndRetryAsync(_maxRetries, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
             try
@@ -142,21 +140,30 @@ namespace LoadBalancer.Implementation
         }
 
         #region Load Balancing Algorithm implementations
+
+        /// <summary>
+        /// Implementation for Weighted Round Robin algorithm
+        /// Consider the weights of servers
+        /// </summary>
+        /// <returns></returns>
         private BackendServer WeightedRoundRobinAlgorithm()
         {
             lock (lockObject)
-            {
-                // Implementation for Weighted Round Robin algorithm
-                // Consider the weights of servers
+            { 
                 return GetWeightedRoundRobinServer();
             }
         }
+
+
+        /// <summary>
+        /// Implementation for Round Robin algorithm
+        /// Select the next server in a circular manner
+        /// </summary>
+        /// <returns></returns>
         private BackendServer RoundRobinAlgorithm()
         {
             lock (lockObject)
-            {
-                // Implementation Round Robin algorithm here
-                // Select the next server in a circular manner
+            { 
                 int currentIndex = GetNextRoundRobinIndex();
                 return backendServers[currentIndex];
             }
@@ -168,6 +175,7 @@ namespace LoadBalancer.Implementation
             return roundRobinIndex;
         }
 
+        
         private BackendServer GetWeightedRoundRobinServer()
         {
             int totalWeight = backendServers.Sum(server => server.Weight);
@@ -186,22 +194,29 @@ namespace LoadBalancer.Implementation
             return backendServers.First();
         }
 
+        /// <summary>
+        /// Implementation Random algorithm here
+        /// Randomly select a server
+        /// </summary>
+        /// <returns></returns>
         private BackendServer RandomAlgorithm()
         {
             lock (lockObject)
             {
-                // Implement Random algorithm here
-                // Randomly select a server
+                
                 return backendServers[random.Next(backendServers.Count)];
             }
         }
 
+        /// <summary>
+        /// Implementation for Least Connections algorithm
+        /// Choose the server with the least active connections
+        /// </summary>
+        /// <returns></returns>
         private BackendServer LeastConnectionsAlgorithm()
         {
             lock (lockObject)
-            {
-                // Implement Least Connections algorithm here
-                // Choose the server with the least active connections
+            { 
                 return GetLeastConnectionsServer();
             }
         }
@@ -222,12 +237,15 @@ namespace LoadBalancer.Implementation
             return selectedServer;
         }
 
+        /// <summary>
+        ///  Implementation for Least Response Time algorithm
+        ///  Choose the server with the lowest response time
+        /// </summary>
+        /// <returns></returns>
         private BackendServer LeastResponseTimeAlgorithm()
         {
             lock (lockObject)
-            {
-                // Implement Least Response Time algorithm here
-                // Choose the server with the lowest response time
+            { 
                 return GetLeastResponseTimeServer();
             }
         }
@@ -261,12 +279,16 @@ namespace LoadBalancer.Implementation
             return 0.0; // Placeholder, replace with actual measurement logic
         }
 
+        /// <summary>
+        /// Implementation of Least Requests algorithm
+        /// Choose the server with the least outstanding requests
+        /// </summary>
+        /// <returns></returns>
         private BackendServer LeastRequestsAlgorithm()
         {
             lock (lockObject)
             {
-                // Implement Least Requests algorithm here
-                // Choose the server with the least outstanding requests
+               
                 return GetLeastRequestsServer();
             }
         }
@@ -291,12 +313,16 @@ namespace LoadBalancer.Implementation
             return selectedServer;
         }
 
+
+        /// <summary>
+        /// Implementation for Consistent Hash algorithm 
+        /// Use the consistent hash ring to select a server
+        /// </summary>
+        /// <returns></returns>
         private BackendServer ConsistentHashAlgorithm()
         {
             lock (lockObject)
-            {
-                // Implement Consistent Hash algorithm here
-                // Use the consistent hash ring to select a server
+            { 
                 return consistentHash.GetNode(Guid.NewGuid().ToString()); // Use a random key for consistent hashing
             }
         }
